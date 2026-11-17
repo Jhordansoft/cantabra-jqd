@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cántabra PEDIDOS </title>
+<style>
+:root{--navy:#050505;--blue:#2fd188;--bg:#f3f6fb;--text:#203047;--muted:#64748b;--line:#e3eaf3;--green:#087f5b;--red:#c43d4a}
+*{box-sizing:border-box}body{margin:0;font:15px/1.5 system-ui,Segoe UI,Arial;color:var(--text);background:var(--bg)}
+.layout{display:flex;min-height:100vh}aside{background:var(--navy);color:rgb(170, 92, 92);width:244px;padding:25px 15px;position:sticky;top:0;height:100vh;flex-shrink:0}
+.logo{font-weight:800;font-size:22px;padding:8px 13px 28px}.logo small{display:block;font-size:11px;font-weight:400;color:#b4c8e3;letter-spacing:1.4px}
+nav button{width:100%;background:transparent;color:#c8d6e9;border:0;text-align:left;padding:13px 14px;border-radius:10px;cursor:pointer;font-size:14px;margin:3px 0}
+nav button:hover,nav button.active{background:#2a456c;color:white}
+main{padding:30px 34px;width:100%;min-width:0;max-width:1500px;margin:auto}
+.top{display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap;margin-bottom:23px}
+h1{margin:0;font-size:27px}h2{font-size:19px;margin:0 0 16px}p{color:var(--muted)}
+.tag{background:#e5edff;color:#2453a6;border-radius:30px;padding:7px 12px;font-size:12px}
+.cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:15px;margin-bottom:23px}
+.card,.panel{background:white;border:1px solid var(--line);border-radius:15px;padding:21px;box-shadow:0 3px 14px #172c4810}
+.metric{font-size:31px;font-weight:800;margin-top:6px}.muted{color:var(--muted);font-size:13px}
+.panel{margin-bottom:20px;overflow-x:auto}.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:15px}
+input,select,textarea{border:1px solid #cbd5e1;border-radius:8px;padding:10px 12px;font:inherit;min-width:0;background:white;color:var(--text)}
+input[type=number]{width:100px}input[type=search]{flex:1;min-width:180px}
+button.primary,.secondary,.danger{border:0;border-radius:9px;padding:10px 15px;font-weight:650;cursor:pointer}
+.primary{background:var(--blue);color:white}.secondary{background:#e9effa;color:#21467c}.danger{background:#ffe7e9;color:var(--red)}
+button:disabled{opacity:.5;cursor:not-allowed}
+table{width:100%;border-collapse:collapse;text-align:left;min-width:660px}
+th{font-size:12px;color:var(--muted);font-weight:700;background:#f7f9fc}td,th{padding:12px;border-bottom:1px solid var(--line);vertical-align:middle}
+.pill{display:inline-block;border-radius:30px;background:#edf1f7;padding:4px 9px;font-size:12px;font-weight:650}
+.pill.good{background:#dff6e9;color:#087f5b}.pill.bad{background:#ffe5e7;color:#b42f3e}.pill.warn{background:#fff2d7;color:#915e00}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.formgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+.field{display:flex;flex-direction:column;gap:5px;font-size:13px;font-weight:650}.field input,.field select{width:100%}
+.products{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.product{border:1px solid var(--line);border-radius:13px;padding:17px;background:white}
+.product .emoji{font-size:33px;background:#eaf1fd;border-radius:12px;padding:16px;text-align:center;margin-bottom:12px}
+.product h3{margin:0 0 3px}.product p{margin:3px 0 12px}.product .bottom{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.view{display:none}.view.active{display:block}.actions{display:flex;gap:7px;flex-wrap:wrap}
+.notice{padding:12px 15px;border-radius:10px;background:#eaf3ff;color:#255083;margin-bottom:15px}
+.small{font-size:12px}.right{text-align:right}
+dialog{border:0;border-radius:16px;box-shadow:0 20px 70px #0004;width:min(610px,95vw);padding:25px}dialog::backdrop{background:#12223890}
+dialog h2{margin-bottom:14px}.dialog-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:20px}
+#toast{position:fixed;bottom:22px;right:20px;background:#17365d;color:white;padding:13px 20px;border-radius:10px;display:none;z-index:10}
+@media(max-width:1000px){.cards{grid-template-columns:repeat(2,1fr)}.products{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:700px){.layout{display:block}aside{height:auto;width:100%;position:static;padding:12px}.logo{padding:4px 10px}nav{display:flex;overflow-x:auto}nav button{white-space:nowrap;width:auto}main{padding:18px}.cards,.products,.grid2,.formgrid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="layout">
+<aside><div class="logo">Cantabra<small>GESTIÓN DE PEDIDOS</small></div>
+<nav id="nav">
+<button data-view="dashboard" class="active">▦ &nbsp; Panel</button>
+<button data-view="catalogo">▣ &nbsp; Catálogo</button>
+<button data-view="nuevo">＋ &nbsp; Agregar pedido</button>
+<button data-view="pedidos">☷ &nbsp; Gestión de pedidos</button>
+<button data-view="seguimiento">◉ &nbsp; Seguimiento</button>
+<button data-view="inventario">▤ &nbsp; Inventario</button>
+<button data-view="ayuda">ⓘ &nbsp; Acerca del prototipo</button>
+</nav></aside>
+<main>
+<div class="top"><div><h1 id="pageTitle">Panel principal</h1><div class="muted">Sistema de Gestión de Pedidos · Prototipo académico</div></div><span class="tag">DEMO LOCAL · Autor: Jhordan Q. D.</span></div>
+<section class="view active" id="dashboard">
+<div class="cards" id="metrics"></div>
+<div class="grid2"><div class="panel"><h2>Últimos pedidos</h2><div id="latest"></div></div>
+<div class="panel"><h2>Flujo de trabajo</h2><p>Registro → Disponibilidad → Pago → Preparación → Despacho → Entrega</p><div class="notice">Los pagos son simulados. No se realiza ningún cobro ni conexión con bancos.</div><button class="primary" onclick="go('nuevo')">Registrar pedido</button></div></div>
+</section>
+<section class="view" id="catalogo"><div class="toolbar"><input type="search" id="searchProducts" placeholder="Buscar producto..." oninput="renderCatalog()"><button class="primary" onclick="go('nuevo')">Crear pedido</button></div><div class="products" id="productCards"></div></section>
+<section class="view" id="nuevo"><div class="panel"><h2>Registrar orden de compra</h2><p>Completa los datos del cliente y selecciona un producto del catálogo.</p>
+<form id="orderForm"><div class="formgrid">
+<label class="field">Nombre del cliente<input name="cliente" required maxlength="90" placeholder="Ej. María López"></label>
+<label class="field">Correo de contacto<input name="email" type="email" required placeholder="cliente@ejemplo.com"></label>
+<label class="field">Dirección de entrega<input name="direccion" required maxlength="150" placeholder="Calle, número y ciudad"></label>
+<label class="field">Producto<select name="producto" id="orderProduct" required></select></label>
+<label class="field">Cantidad<input name="cantidad" type="number" min="1" max="1000" value="1" required></label>
+</div><div style="margin-top:18px"><button class="primary" type="submit">Guardar pedido</button></div></form></div>
+<div class="notice">Después de guardar el pedido, continúa en «Gestión de pedidos» para verificar stock, pago y despacho.</div></section>
+<section class="view" id="pedidos"><div class="panel"><div class="toolbar"><input type="search" id="searchOrders" placeholder="Buscar por código o cliente..." oninput="renderOrders()"><select id="filterStatus" onchange="renderOrders()"><option value="">Todos los estados</option></select><button class="secondary" onclick="exportCSV()">Exportar CSV</button></div><div id="ordersTable"></div></div></section>
+<section class="view" id="seguimiento"><div class="panel"><h2>Consultar estado de pedido</h2><p>Ingresa el código del pedido para visualizar su estado y el historial de cambios.</p><div class="toolbar"><input id="trackingCode" placeholder="Ej. PED-1001"><button class="primary" onclick="track()">Consultar</button></div><div id="trackingResult"></div></div></section>
+<section class="view" id="inventario"><div class="panel"><div class="toolbar"><h2 style="margin:0;flex:1">Inventario de productos</h2><button class="primary" onclick="productDialog()">Agregar producto</button></div><div id="inventoryTable"></div></div></section>
+<section class="view" id="ayuda"><div class="panel"><h2>Acerca del proyecto</h2><p><strong>Proyecto:</strong> Sistema de Gestión de Pedidos para WEB-Cántabra.</p><p><strong>Autor:</strong> Jhordan QD <strong>Curso:</strong> Ingeniería de Software y Metodologías Ágiles · <strong>Metodología:</strong> Scrum con tablero Kanban en Asana.</p><p>Este prototipo permite demostrar registro de pedidos, control de disponibilidad, alternativas, validación simulada de pagos, preparación, despacho, entrega y cancelación.</p><div class="notice">Los datos se guardan únicamente en este navegador mediante localStorage. No hay servidor, autenticación real, envío de correos ni pasarela de pagos. Es un prototipo para demostración académica, no un sistema listo para producción.</div><button class="secondary" onclick="resetDemo()">Restablecer datos de demostración</button></div></section>
+</main></div>
+<dialog id="modal"><h2 id="modalTitle"></h2><div id="modalBody"></div><div class="dialog-actions"><button class="secondary" onclick="document.getElementById('modal').close()">Cerrar</button><button class="primary" id="modalConfirm">Guardar</button></div></dialog>
+<div id="toast"></div>
+<script>
+const STATUS=['Pedido registrado','Verificando disponibilidad','Pendiente de producto alternativo','Validando pago','Pendiente de pago alternativo','Pago confirmado','En preparación','En tránsito','Entregado','Cancelado'];
+const seedProducts=[
+{id:1,name:'Laptop empresarial',price:2400,stock:8,emoji:'💻',desc:'Equipo portátil para trabajo y estudio'},
+{id:2,name:'Mouse inalámbrico',price:65,stock:24,emoji:'🖱️',desc:'Mouse ergonómico de conexión inalámbrica'},
+{id:3,name:'Teclado mecánico',price:180,stock:12,emoji:'⌨️',desc:'Teclado de alto rendimiento'},
+{id:4,name:'Monitor LED 24"',price:680,stock:5,emoji:'🖥️',desc:'Pantalla Full HD para oficina'},
+{id:5,name:'Auriculares USB',price:115,stock:0,emoji:'🎧',desc:'Auriculares con micrófono integrado'},
+{id:6,name:'Webcam HD',price:145,stock:9,emoji:'📷',desc:'Cámara para reuniones virtuales'}];
+const seedOrders=[
+{id:'PED-1001',cliente:'María Torres',email:'maria@ejemplo.com',direccion:'Huancayo',productId:2,qty:2,status:'Entregado',payment:'Pago validado (simulado)',date:'2026-11-12',history:[{status:'Pedido registrado',date:'2026-11-12 09:00'},{status:'Entregado',date:'2026-11-13 11:30'}]},
+{id:'PED-1002',cliente:'Carlos Rojas',email:'carlos@ejemplo.com',direccion:'El Tambo',productId:4,qty:1,status:'En preparación',payment:'Pago validado (simulado)',date:'2026-11-14',history:[{status:'Pedido registrado',date:'2026-11-14 14:20'},{status:'En preparación',date:'2026-11-15 10:00'}]},
+{id:'PED-1003',cliente:'Ana Pérez',email:'ana@ejemplo.com',direccion:'Chilca',productId:5,qty:1,status:'Pedido registrado',payment:'Sin validar',date:'2026-11-16',history:[{status:'Pedido registrado',date:'2026-11-16 08:00'}]}
+];
+const KEY='webcantabra_demo_v2';
+function initial(){return {products:structuredClone(seedProducts),orders:structuredClone(seedOrders),next:1004}}
+let db;
+try{db=JSON.parse(localStorage.getItem(KEY))||initial();if(!Array.isArray(db.orders)||!Array.isArray(db.products))throw Error()}catch(e){db=initial()}
+function save(){localStorage.setItem(KEY,JSON.stringify(db));renderAll()}
+const money=n=>'S/ '+Number(n).toFixed(2);
+const product=id=>db.products.find(p=>p.id===Number(id));
+const dateNow=()=>new Date().toLocaleString('es-PE');
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function toast(s){const el=document.getElementById('toast');el.textContent=s;el.style.display='block';clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>el.style.display='none',2600)}
+function badge(s){let c=s==='Entregado'||s==='Pago confirmado'?'good':s==='Cancelado'?'bad':s.includes('Pendiente')?'warn':'';return `<span class="pill ${c}">${esc(s)}</span>`}
+function go(id){document.querySelectorAll('.view').forEach(x=>x.classList.toggle('active',x.id===id));document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('active',x.dataset.view===id));document.getElementById('pageTitle').textContent=({dashboard:'Panel principal',catalogo:'Catálogo de productos',nuevo:'Nuevo pedido',pedidos:'Gestión de pedidos',seguimiento:'Seguimiento',inventario:'Inventario',ayuda:'Acerca del prototipo'})[id];renderAll();window.scrollTo(0,0)}
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>go(b.dataset.view));
+function renderDashboard(){
+const stats=[['Total de pedidos',db.orders.length],['Pendientes',db.orders.filter(o=>!['Entregado','Cancelado'].includes(o.status)).length],['Entregados',db.orders.filter(o=>o.status==='Entregado').length],['Cancelados',db.orders.filter(o=>o.status==='Cancelado').length]];
+document.getElementById('metrics').innerHTML=stats.map(([k,v])=>`<div class="card"><div class="muted">${k}</div><div class="metric">${v}</div></div>`).join('');
+document.getElementById('latest').innerHTML=db.orders.slice(-5).reverse().map(o=>`<div style="padding:12px 0;border-bottom:1px solid #e3eaf3"><strong>${esc(o.id)}</strong> · ${esc(o.cliente)}<div>${badge(o.status)}</div></div>`).join('')||'<p>Sin pedidos</p>'}
+function renderCatalog(){let q=document.getElementById('searchProducts').value.toLowerCase();document.getElementById('productCards').innerHTML=db.products.filter(p=>p.name.toLowerCase().includes(q)).map(p=>`<div class="product"><div class="emoji">${p.emoji}</div><h3>${esc(p.name)}</h3><p class="small">${esc(p.desc)}</p><div class="muted">Stock: ${p.stock}</div><div class="bottom"><strong>${money(p.price)}</strong><button class="secondary" onclick="selectProduct(${p.id})">Solicitar</button></div></div>`).join('')||'<p>No hay productos que coincidan.</p>'}
+function selectProduct(id){go('nuevo');document.getElementById('orderProduct').value=id}
+function renderForm(){let sel=document.getElementById('orderProduct'),old=sel.value;sel.innerHTML=db.products.map(p=>`<option value="${p.id}">${esc(p.name)} — ${money(p.price)}</option>`).join('');if(old)sel.value=old}
+document.getElementById('orderForm').onsubmit=e=>{e.preventDefault();let f=new FormData(e.target),pid=Number(f.get('producto')),qty=Number(f.get('cantidad'));if(!product(pid)||!Number.isInteger(qty)||qty<1){toast('Datos de pedido inválidos');return}let o={id:'PED-'+db.next++,cliente:String(f.get('cliente')).trim(),email:String(f.get('email')).trim(),direccion:String(f.get('direccion')).trim(),productId:pid,qty,status:'Pedido registrado',payment:'Sin validar',date:new Date().toISOString().slice(0,10),history:[{status:'Pedido registrado',date:dateNow()}]};db.orders.push(o);save();e.target.reset();toast('Pedido '+o.id+' registrado');go('pedidos')};
+function renderOrders(){let q=document.getElementById('searchOrders').value.toLowerCase(),s=document.getElementById('filterStatus').value;document.getElementById('ordersTable').innerHTML=`<table><thead><tr><th>Código</th><th>Cliente</th><th>Producto</th><th>Total</th><th>Estado</th><th>Acciones</th></tr></thead><tbody>${db.orders.filter(o=>(o.id.toLowerCase().includes(q)||o.cliente.toLowerCase().includes(q))&&(!s||o.status===s)).map(o=>`<tr><td><strong>${esc(o.id)}</strong><div class="muted">${esc(o.date)}</div></td><td>${esc(o.cliente)}</td><td>${esc(product(o.productId)?.name||'Producto no disponible')} × ${o.qty}</td><td>${money((product(o.productId)?.price||0)*o.qty)}</td><td>${badge(o.status)}</td><td><button class="secondary" onclick="manage('${o.id}')">Gestionar</button></td></tr>`).join('')}</tbody></table>`}
+function setStatus(o,status,detail=''){o.status=status;o.history.push({status,date:dateNow(),detail});save()}
+function modal(title,body,confirm){document.getElementById('modalTitle').textContent=title;document.getElementById('modalBody').innerHTML=body;let btn=document.getElementById('modalConfirm');btn.onclick=confirm;btn.style.display=confirm?'inline-block':'none';document.getElementById('modal').showModal()}
+function manage(id){
+let o=db.orders.find(x=>x.id===id);if(!o)return;let p=product(o.productId);
+let info=`<p><strong>${esc(o.cliente)}</strong> · ${esc(o.id)}</p><p>Producto: ${esc(p?.name||'No disponible')} × ${o.qty}<br>Estado: ${esc(o.status)}<br>Pago: ${esc(o.payment)}</p>`;
+let next={
+'Pedido registrado':['Iniciar verificación','Verificando disponibilidad'],
+'Verificando disponibilidad':p&&p.stock>=o.qty?['Confirmar disponibilidad','Validando pago']:['Ofrecer alternativa','Pendiente de producto alternativo'],
+'Pendiente de producto alternativo':['Aceptar alternativa','Validando pago'],
+'Validando pago':['Validar pago (simulado)','Pago confirmado'],
+'Pendiente de pago alternativo':['Registrar nuevo pago','Validando pago'],
+'Pago confirmado':['Iniciar preparación','En preparación'],
+'En preparación':['Registrar despacho','En tránsito'],
+'En tránsito':['Confirmar entrega','Entregado']
+}[o.status];
+let buttons=`<div class="actions">${next?`<button class="primary" id="nextAction">${esc(next[0])}</button>`:''}
+${o.status==='Verificando disponibilidad'&&p&&p.stock<o.qty?'<button class="secondary" id="stockRefresh">Revisar inventario</button>':''}
+${o.status==='Validando pago'?'<button class="danger" id="invalidPayment">Pago no válido</button>':''}
+${!['Entregado','Cancelado'].includes(o.status)?'<button class="danger" id="cancelOrder">Cancelar pedido</button>':''}</div>`;
+modal('Procesar '+o.id,info+buttons,null);
+let box=document.getElementById('modalBody');
+if(next)box.querySelector('#nextAction').onclick=()=>{
+if(o.status==='Verificando disponibilidad'&&(!p||p.stock<o.qty)){toast('Stock insuficiente: se debe ofrecer alternativa');return}
+if(o.status==='Pendiente de producto alternativo'){chooseAlternative(o);return}
+if(o.status==='Validando pago')o.payment='Pago validado (simulado)';
+if(o.status==='En preparación'){if(p){if(p.stock<o.qty){toast('Stock insuficiente para despacho');return}p.stock-=o.qty}}
+setStatus(o,next[1]);document.getElementById('modal').close();toast('Estado actualizado')};
+if(box.querySelector('#invalidPayment'))box.querySelector('#invalidPayment').onclick=()=>{o.payment='Pago no válido (simulado)';setStatus(o,'Pendiente de pago alternativo');document.getElementById('modal').close();toast('Solicitar otro pago')};
+if(box.querySelector('#cancelOrder'))box.querySelector('#cancelOrder').onclick=()=>{if(confirm('¿Cancelar el pedido?')){setStatus(o,'Cancelado');document.getElementById('modal').close();toast('Pedido cancelado')}};
+if(box.querySelector('#stockRefresh'))box.querySelector('#stockRefresh').onclick=()=>{document.getElementById('modal').close();go('inventario')};
+}
+function chooseAlternative(o){let options=db.products.filter(p=>p.id!==o.productId&&p.stock>=o.qty);modal('Producto alternativo',`<p>El producto original no tiene stock suficiente. Selecciona una alternativa disponible y confirma la aceptación del cliente.</p><label class="field">Alternativa<select id="alternative">${options.map(p=>`<option value="${p.id}">${esc(p.name)} — ${money(p.price)} (stock ${p.stock})</option>`).join('')}</select></label><p class="small">Si el cliente no acepta, utiliza la opción Cancelar pedido.</p>`,()=>{let id=Number(document.getElementById('alternative').value);if(!id){toast('No hay alternativas disponibles');return}o.productId=id;setStatus(o,'Validando pago','Cliente aceptó producto alternativo');document.getElementById('modal').close();toast('Alternativa aceptada')})}
+function renderInventory(){document.getElementById('inventoryTable').innerHTML=`<table><thead><tr><th>Producto</th><th>Precio</th><th>Stock</th><th>Acción</th></tr></thead><tbody>${db.products.map(p=>`<tr><td>${p.emoji} ${esc(p.name)}</td><td>${money(p.price)}</td><td>${p.stock===0?badge('Agotado'):p.stock}</td><td><button class="secondary" onclick="productDialog(${p.id})">Editar</button></td></tr>`).join('')}</tbody></table>`}
+function productDialog(id){let p=id?product(id):null;modal(p?'Editar producto':'Agregar producto',`<div class="formgrid"><label class="field">Nombre<input id="pname" maxlength="70" value="${esc(p?.name||'')}"></label><label class="field">Precio S/<input id="pprice" type="number" min="0.01" step=".01" value="${p?.price||''}"></label><label class="field">Stock<input id="pstock" type="number" min="0" step="1" value="${p?.stock??0}"></label><label class="field">Descripción<input id="pdesc" maxlength="120" value="${esc(p?.desc||'')}"></label></div>`,()=>{let name=document.getElementById('pname').value.trim(),price=Number(document.getElementById('pprice').value),stock=Number(document.getElementById('pstock').value),desc=document.getElementById('pdesc').value.trim();if(!name||!(price>0)||!Number.isInteger(stock)||stock<0){toast('Revisa los datos del producto');return}if(p)Object.assign(p,{name,price,stock,desc});else db.products.push({id:Math.max(0,...db.products.map(x=>x.id))+1,name,price,stock,desc,emoji:'📦'});save();document.getElementById('modal').close();toast('Producto guardado')})}
+function track(){let id=document.getElementById('trackingCode').value.trim().toUpperCase(),o=db.orders.find(x=>x.id===id);document.getElementById('trackingResult').innerHTML=o?`<h2>${esc(o.id)} · ${badge(o.status)}</h2><p>Cliente: ${esc(o.cliente)} · Producto: ${esc(product(o.productId)?.name||'No disponible')}</p><h3>Historial</h3>${o.history.map(h=>`<div style="padding:12px;border-left:3px solid #2366dc;margin:8px 0;background:#f6f9fe"><strong>${esc(h.status)}</strong><div class="muted">${esc(h.date)} ${esc(h.detail||'')}</div></div>`).join('')}`:'<p>No se encontró el pedido. Verifica el código.'}
+function exportCSV(){let rows=[['Código','Cliente','Correo','Producto','Cantidad','Estado','Pago','Fecha'],...db.orders.map(o=>[o.id,o.cliente,o.email,product(o.productId)?.name||'',o.qty,o.status,o.payment,o.date])];let csv='\ufeff'+rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\r\n');let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='pedidos_web_cantabra.csv';a.click();URL.revokeObjectURL(a.href)}
+function resetDemo(){if(confirm('¿Restablecer todos los datos locales de demostración?')){db=initial();save();toast('Datos restaurados');go('dashboard')}}
+function renderAll(){renderDashboard();renderCatalog();renderForm();renderOrders();renderInventory();let filter=document.getElementById('filterStatus'),v=filter.value;filter.innerHTML='<option value="">Todos los estados</option>'+STATUS.map(s=>`<option>${s}</option>`).join('');filter.value=v}
+renderAll();
+</script>
+</body></html>
